@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tile_description">Open the stopwatch</string>
+    <string name="tile_open">Open stopwatch</string>
+    <string name="complication_open">Open</string>
+</resources>

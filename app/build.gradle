@@ -1,0 +1,51 @@
+plugins {
+    id 'com.android.application'
+}
+
+def appVersion = new Properties()
+file('version.properties').withInputStream { appVersion.load(it) }
+
+android {
+    namespace 'fr.chronomontre.prototype'
+    compileSdk appVersion.getProperty('compileSdk').toInteger()
+
+    defaultConfig {
+        // Preserve the prototype's identity so this installs as an update.
+        applicationId appVersion.getProperty('applicationId')
+        minSdk appVersion.getProperty('minSdk').toInteger()
+        // Keep Samsung's working legacy Back-key path for this personal-use app.
+        targetSdk appVersion.getProperty('targetSdk').toInteger()
+        versionCode appVersion.getProperty('versionCode').toInteger()
+        versionName appVersion.getProperty('versionName')
+    }
+
+    signingConfigs {
+        debug {
+            storeFile rootProject.file('.local/debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+
+    buildTypes {
+        release {
+            // Use the existing private key so sideloaded updates keep working.
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.wear.tiles:tiles:1.6.2'
+    implementation 'androidx.wear.protolayout:protolayout:1.4.2'
+    implementation 'androidx.concurrent:concurrent-futures:1.1.0'
+    implementation 'androidx.wear.watchface:watchface-complications-data-source:1.2.1'
+    testImplementation 'junit:junit:4.13.2'
+}
